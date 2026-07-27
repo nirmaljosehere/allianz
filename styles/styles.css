@@ -14,8 +14,11 @@
   /* colors */
   --background-color: white;
   --light-color: #f2f4f7;
+  --highlight-color: #cfe9ee;
   --dark-color: #00193c;
-  --text-color: #1a1a1a;
+  --dark-color-opacity: rgb(0 25 60 / 60%);
+  --text-color: #003781;
+  --text-light: #fff;
 
   /* Allianz brand blue */
   --brand-color: #003781;
@@ -38,6 +41,12 @@
   --heading-font-size-m: 28px;
   --heading-font-size-s: 22px;
   --heading-font-size-xs: 18px;
+
+  /* teaser block title size */
+  --font-size-1000: 40px;
+
+  /* button corner radius */
+  --button-radius: 8px;
 
   /* nav height */
   --nav-height: 64px;
@@ -178,7 +187,7 @@ button.button {
   max-width: 100%;
   margin: 0;
   border: 1px solid transparent;
-  border-radius: 0;
+  border-radius: var(--button-radius);
   padding: 0.75em 2em;
   font-family: var(--body-font-family);
   font-size: var(--body-font-size-s);
@@ -321,7 +330,14 @@ main > .section:first-of-type {
 /* section metadata */
 main .section.light,
 main .section.highlight {
-  background-color: var(--light-color);
   margin: 0;
   padding: 40px 0;
+}
+
+main .section.light {
+  background-color: var(--light-color);
+}
+
+main .section.highlight {
+  background-color: var(--highlight-color);
 }
