@@ -84,15 +84,12 @@ html[dir="rtl"] .teaser-wrapper .video-container .video-pause .video-pause-btn{
     width: 72%;
 }
 
+/* layout only; rich text elements keep their natural site typography */
 .teaser-wrapper .teaser-title {
-    font-family: var(--body-font-family);
-    font-size: var(--font-size-1000);
     color: var(--text-light);
     text-align: center;
     padding-top: 15%;
-    font-weight: 700;
     margin: 0;
-    line-height: 40px;
 }
 
 .teaser-wrapper .teaser-title > :first-child {
