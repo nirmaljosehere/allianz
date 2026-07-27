@@ -1,6 +1,5 @@
 import {
   div, a, span, img, video, source, button,
-  h2,
 } from '../../scripts/dom-helpers.js';
 import { readBlockConfig } from '../../scripts/aem.js';
 
@@ -108,6 +107,15 @@ function attachListeners() {
 export default function decorate(block) {
   const sampleVideo = 'https://v.ftcdn.net/02/35/97/40/700_F_235974059_oVftmgBBJ32tgsDvxRdMdtpQDMfNFWEt_ST.mp4';
 
+  // Preserve the authored rich text for the title before readBlockConfig flattens it to plain text
+  let titleHTML = '';
+  block.querySelectorAll(':scope > div').forEach((row) => {
+    const cells = [...row.children];
+    if (cells[1] && cells[0].textContent.trim().toLowerCase() === 'title') {
+      titleHTML = cells[1].innerHTML.trim();
+    }
+  });
+
   const properties = readBlockConfig(block);
 
   let swooshbgClass = 'swoosh-bg';
@@ -128,7 +136,8 @@ export default function decorate(block) {
   const swooshSecond = `${window.hlx.codeBasePath}/icons/teaser_outerswoosh.svg`;
   const isVideo = (properties.teaserstyle && properties.teaserstyle === 'video');
   const videoAutoplay = (properties.videobehavior && properties.videobehavior === 'autoplay');
-  const buttonText = properties.buttonlabel;
+  const rawButtonText = (properties.buttonlabel || '').trim();
+  const buttonText = rawButtonText.toLowerCase() === 'null' ? '' : rawButtonText;
   const buttonStyle = (properties['btn-style']) ? properties['btn-style'] : 'dark-bg';
   const buttonLink = (properties['btn-link']) ? properties['btn-link'] : '';
   const videoReference = isVideo ? properties.videoreference : sampleVideo;
@@ -138,6 +147,13 @@ export default function decorate(block) {
     span({ class: 'button-text' }, buttonText),
   ) : null;
 
+  const titleWrapper = div({ class: 'teaser-title-wrapper' },
+    div({ class: 'teaser-title' }),
+  );
+  if (buttonEl) {
+    titleWrapper.append(div({ class: buttonContainerClass }, buttonEl));
+  }
+
   const teaser = div({ class: 'teaser-container' },
     isVideo ? createVideoPlayer(videoReference) : createBackgroundImage(properties),
     div({ class: 'teaser-swoosh-wrapper' },
@@ -146,14 +162,11 @@ export default function decorate(block) {
         img({ class: 'swoosh first', src: swooshFirst, alt: 'background swoosh first' }),
         img({ class: 'swoosh second', src: swooshSecond, alt: 'background swoosh second' }),
       ),
-      div({ class: 'teaser-title-wrapper' },
-        h2({ class: 'teaser-title' }),
-        buttonEl ? div({ class: buttonContainerClass }, buttonEl) : null,
-      ),
+      titleWrapper,
     ),
   );
 
-  teaser.querySelector('.teaser-title').innerHTML = properties.title || 'Title';
+  teaser.querySelector('.teaser-title').innerHTML = titleHTML || 'Title';
   block.innerHTML = '';
   block.appendChild(teaser);
 
