@@ -106,10 +106,6 @@ function attachListeners() {
 }
 
 export default function decorate(block) {
-  const rteElementTag = Array.from(block.querySelectorAll('p'))
-    .find((el) => el.textContent.trim() === 'title');
-  const rteElement = rteElementTag?.parentElement?.nextElementSibling;
-  const rteContent = rteElement?.querySelector('p')?.innerHTML;
   const sampleVideo = 'https://v.ftcdn.net/02/35/97/40/700_F_235974059_oVftmgBBJ32tgsDvxRdMdtpQDMfNFWEt_ST.mp4';
 
   const properties = readBlockConfig(block);
@@ -155,7 +151,7 @@ export default function decorate(block) {
     ),
   );
 
-  teaser.querySelector('.teaser-title').innerHTML = properties.title ? rteContent : 'Title';
+  teaser.querySelector('.teaser-title').innerHTML = properties.title || 'Title';
   block.innerHTML = '';
   block.appendChild(teaser);
 
