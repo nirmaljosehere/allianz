@@ -22,11 +22,11 @@
       "id": "teaser",
       "fields": [
         {
-          "component": "text",
-          "valueType": "string",
-          "value": "Your text will show here.",
+          "component": "richtext",
           "name": "title",
-          "label": "Title"
+          "value": "Your text will show here.",
+          "label": "Title",
+          "valueType": "string"
         },
         {
           "component": "select",
