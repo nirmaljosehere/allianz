@@ -128,10 +128,16 @@ export default function decorate(block) {
   const swooshSecond = `${window.hlx.codeBasePath}/icons/teaser_outerswoosh.svg`;
   const isVideo = (properties.teaserstyle && properties.teaserstyle === 'video');
   const videoAutoplay = (properties.videobehavior && properties.videobehavior === 'autoplay');
-  const buttonText = (properties.buttonlabel) ? properties.buttonlabel : 'Button';
+  const buttonText = properties.buttonlabel;
   const buttonStyle = (properties['btn-style']) ? properties['btn-style'] : 'dark-bg';
   const buttonLink = (properties['btn-link']) ? properties['btn-link'] : '';
   const videoReference = isVideo ? properties.videoreference : sampleVideo;
+
+  // only render button if buttonText is provided
+  const buttonEl = buttonText ? a({ id: 'button', href: buttonLink, class: `button ${buttonStyle}` },
+    span({ class: 'button-text' }, buttonText),
+  ) : null;
+
   const teaser = div({ class: 'teaser-container' },
     isVideo ? createVideoPlayer(videoReference) : createBackgroundImage(properties),
     div({ class: 'teaser-swoosh-wrapper' },
@@ -142,11 +148,7 @@ export default function decorate(block) {
       ),
       div({ class: 'teaser-title-wrapper' },
         h2({ class: 'teaser-title' }),
-        div({ class: buttonContainerClass },
-          a({ id: 'button', href: buttonLink, class: `button ${buttonStyle}` },
-            span({ class: 'button-text' }, buttonText),
-          ),
-        ),
+        buttonEl ? div({ class: buttonContainerClass }, buttonEl) : null,
       ),
     ),
   );
